@@ -36,6 +36,5 @@ public:
         if(s=='-')
             res=-res;
         return res;
-      
     }
 };
