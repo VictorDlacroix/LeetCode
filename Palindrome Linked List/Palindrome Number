@@ -1,0 +1,16 @@
+class Solution {
+public:
+    bool isPalindrome(int x) {
+        if(x<0)
+            return false;
+        int tmp1=x;
+        int tmp2=0;
+        do{
+            if(tmp2>INT_MAX/10)
+                return false;
+            tmp2=x%10+tmp2*10;
+            x/=10;
+        }while(x!=0);
+        return tmp1==tmp2?true:false;
+    }
+};
