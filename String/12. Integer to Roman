@@ -1,0 +1,16 @@
+class Solution {
+public:
+    string intToRoman(int num) {
+       string res;
+        int c[]={1000,900,500,400,100,90,50,40,10,9,5,4,1};
+        string str[]={"M","CM","D","CD","C","XC","L","XL","X","IX","V","IV","I"};
+        int n;
+        for(int i =0;num&&i<13;i++){
+            n = num /c[i];
+            for(int j =0; j<n;j++)
+                res+=str[i];
+            num -= c[i]*n;
+        }
+        return res;
+    }
+};
