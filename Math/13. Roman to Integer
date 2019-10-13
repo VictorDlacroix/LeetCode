@@ -1,0 +1,26 @@
+class Solution {
+public:
+    int romanToInt(string s) {
+        map<char,int> conversion;
+        conversion.insert(make_pair('I',1));
+        conversion.insert(make_pair('V',5));
+        conversion.insert(make_pair('X',10));
+        conversion.insert(make_pair('L',50));
+        conversion.insert(make_pair('C',100));
+        conversion.insert(make_pair('D',500));
+        conversion.insert(make_pair('M',1000));
+        
+        int prev=0,sum=0;
+        int len=s.size();
+        for(int i=0;i<len;i++){
+            auto it=conversion.find(s[len-1-i]);
+            if(prev<=it->second)
+                sum+=it->second;
+            else
+                sum-=it->second;
+            
+            prev=it->second;
+        }
+        return sum;
+    }
+};
