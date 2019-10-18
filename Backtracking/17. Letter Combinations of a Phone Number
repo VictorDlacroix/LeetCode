@@ -1,0 +1,46 @@
+class Solution {
+public:
+    void letterMerge(string s,vector<string>& vectorT){
+        int n=s.size();
+        if(n==0)
+            return;
+        if(vectorT.size()==0){
+            for(int i=0;i<n;i++){
+                string s1(1,s[i]);
+                vectorT.push_back(s1);
+            }
+            return;
+        }
+        
+        vector<string> vectorA;
+        for(int i=0;i<vectorT.size();i++)
+            for(int j=0;j<n;j++)
+                vectorA.push_back(vectorT[i]+s[j]);
+        
+        vectorT=vectorA;
+        
+    }
+    
+    vector<string> letterCombinations(string digits) {
+        vector<string> res;
+         if(digits.size()==0)
+            return res;
+        
+        string mapping[10];
+        mapping[2]="abc";
+        mapping[3]="def";
+        mapping[4]="ghi";
+        mapping[5]="jkl";
+        mapping[6]="mno";
+        mapping[7]="pqrs";
+        mapping[8]="tuv";
+        mapping[9]="wxyz";
+        
+        for(auto c:digits){
+            string chs=mapping[c-'0'];
+            letterMerge(chs,res);
+        }
+        
+        return res;
+    }
+};
