@@ -1,0 +1,30 @@
+class Solution {
+public:
+    bool isValid(string s) {
+        stack<char> a;
+        
+        int n=s.length();
+        if(n==0)
+            return true;
+        
+        for(int i=0;i<n;i++){
+            char c=s[i];
+            if(c=='('||c=='['||c=='{')
+                a.push(c);
+            else 
+            {
+                //注意这里有个内存访问越界问题，出错点
+                if(a.size()==0)return false;
+                //上为出错的地方
+                if(c==')'&&a.top()!='(')return false;;
+                if(c==']'&&a.top()!='[')return false;;
+                if(c=='}'&&a.top()!='{')return false;;
+                a.pop();
+            }
+        }
+        if(a.size()==0)
+            return true;
+        else 
+            return false;
+    }
+};
