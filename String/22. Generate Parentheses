@@ -1,0 +1,50 @@
+class Solution {
+public:
+    void backtracking(vector<string>&result, string str, int cur, int left, int n){
+        if(cur == 2*n-1)
+            result.push_back(str+")");
+        
+        if(left < n && cur < 2*n -1)
+            backtracking(result, str+"(", cur+1, left+1, n);
+        
+        if(left > cur-left && cur < 2*n -1)
+            backtracking(result, str+")", cur+1, left, n);
+    }
+        
+    vector<string> generateParenthesis(int n) {
+        vector<string> result;
+        int left = 0;
+        int cur = 0;
+        string str = "";
+        backtracking(result,str,cur,left,n);
+        
+        return result;
+    }
+};
+
+//这里注意区分set和vector，及返回值
+class Solution {
+public:
+    vector<string> generateParenthesis(int n) {
+        vector<set<string>> brackets(n+1);
+        brackets[0].insert("");
+        
+            
+        for(int i = 1; i <= n ; i++){
+            for(int j = 1; j <= i/2 ; j++){
+                for(auto k =  brackets[j].begin(); k !=  brackets[j].end(); k++){
+                    for(auto l =  brackets[i-j].begin(); l != brackets[i-j].end(); l++){
+                        brackets[i].insert(*k + *l);
+                        brackets[i].insert(*l + *k);
+                    }   
+                }
+            }
+            for(auto k =  brackets[i-1].begin(); k !=  brackets[i-1].end(); k++){
+                brackets[i].insert("(" + *k + ")");
+            }
+        }
+        
+        return vector<string>(brackets[n].begin(),brackets[n].end());
+        
+    }
+};
