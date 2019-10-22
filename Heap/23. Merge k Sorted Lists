@@ -1,0 +1,79 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* mergetwo(ListNode* l1, ListNode* l2){
+        ListNode* head = new ListNode(0);
+        ListNode* result = head;
+        
+        if(l1 == NULL)
+            return l2;
+        if(l2 == NULL)
+            return l1;
+        
+        while(l1 != NULL && l2 != NULL)
+        {
+            if(l1->val > l2->val){
+                head->next = l2;
+                l2 = l2->next;
+            }
+            else{
+                head->next = l1;
+                l1 = l1->next;
+            }
+            head = head->next;
+        }
+        
+        if(l1 == NULL)
+            head->next = l2;
+        else
+            head->next = l1;
+        
+        return result->next;
+        
+    }
+    
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+        int n=lists.size();
+        if(n == 0)
+            return NULL;
+        
+        ListNode* head = new ListNode(INT_MIN);
+        ListNode* result = head;
+        for(int i=0; i<n; i++){
+            head = mergetwo(head, lists[i]);
+        }
+        return result->next;
+    }
+};
+
+//大神的做法
+ListNode* mergeKLists(vector<ListNode*>& lists) {
+        vector<int> Result;
+        for (int i{}; i < lists.size(); i++) {
+            ListNode* pTemp = lists[i]; // Pointer to the beginning of each list object.
+            while (pTemp) {
+                Result.push_back(pTemp->val); // Add all the numbers to our result vector
+                pTemp = pTemp->next;
+            }
+        } // By now we have a collection of numbers
+		
+        std::sort(Result.begin(), Result.end()); // Sort them, we now have 1-1- 2- 3- 4- 5....
+        std::reverse(Result.begin(), Result.end()); // Reverse them such that we have 5-4-3-2-1-1
+        
+        ListNode* anchorNode = new ListNode(-1); // Build an anchor
+        ListNode* bridgeBuilder = anchorNode; // Build the bridge via bridgeBuilter
+		
+        while (!Result.empty()) { // Empty the vector, pushing the numbers in the back onto the bridge.
+            bridgeBuilder->next = new ListNode(Result.back());
+            Result.pop_back(); // After a number is added to the bridge, get rid of it in the vector.
+            bridgeBuilder = bridgeBuilder->next;
+        }
+        return anchorNode->next; // The bridge starts after the anchor, return the bridge.
+    }
