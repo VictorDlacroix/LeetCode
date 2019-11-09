@@ -1,0 +1,22 @@
+
+/*如果可以直接交换值，效率更高*/
+
+
+class Solution {
+public:
+    ListNode* swapPairs(ListNode* head) {
+        if(head == NULL||head->next == nullptr)
+            return head;
+        
+        ListNode* next = head->next;
+        ListNode* tail = swapPairs(next->next);
+        
+        head->next = tail;
+        next->next = head;
+        head = next;
+        
+        return head;
+        
+}
+
+};
