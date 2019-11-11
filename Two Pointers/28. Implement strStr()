@@ -1,0 +1,32 @@
+class Solution {
+public:
+    int strStr(string haystack, string needle) {
+        if(haystack.length()==0)return 0;
+        int index = 0;
+        while(index < haystack.length() && index <= (haystack.length()-needle.length()))
+        {
+            if(haystack[index] == needle[0])
+            {
+                int i = 0;
+                for(; i<needle.size(); ++i)
+                {
+                    if(haystack[index+i] != needle[i])break;
+                }
+                if(i == needle.length())return index; 
+            }
+            index++;
+        }
+        return -1;
+    }
+};
+
+class Solution {
+public:
+    int strStr(string haystack, string needle) {
+        unsigned idx = haystack.find(needle);
+        if(idx == string::npos)
+            return -1;
+        else
+            return idx;
+    }
+};
