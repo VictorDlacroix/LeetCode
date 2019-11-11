@@ -30,3 +30,11 @@ public:
             return idx;
     }
 };
+
+//上述方法可以再简化
+class Solution {
+public:
+    int strStr(string haystack, string needle) {
+        return haystack.find(needle);
+    }
+};
