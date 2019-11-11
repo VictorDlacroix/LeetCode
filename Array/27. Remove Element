@@ -1,0 +1,33 @@
+class Solution {
+public:
+    int removeElement(vector<int>& nums, int val) {
+        return std::distance(nums.begin(),std::remove(nums.begin(),nums.end(),val));
+    }
+};
+
+
+class Solution {
+public:
+    int removeElement(vector<int>& nums, int val) {
+        int n = nums.size();
+        int i = 0, j =0;
+        if(n==0)
+            return 0;
+        while(j < n)
+        {
+            if(nums[i] == val && nums[j] != val)
+            {
+                swap(nums[i],nums[j]);
+                i++;
+            }
+            if(nums[i] == val && nums[j] == val)
+                j++;
+            if(nums[i] != val)
+            {
+                i++,j++;
+            }
+                
+        }
+        return n - (j - i);
+    }
+};
