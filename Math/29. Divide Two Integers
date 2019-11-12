@@ -1,0 +1,89 @@
+bit manipulation solution,
+
+class Solution {
+public:
+    int divide(int dividend, int divisor) {
+        int sign = 1;
+        if ((dividend > 0 && divisor < 0) || (dividend < 0 && divisor > 0))
+            sign = -1;
+
+        long dividend1 = labs(dividend);
+        long divisor1 = labs(divisor);
+        long res = 0;
+
+        long counter = 1;
+        long temp = divisor1;
+        while (temp <= dividend1) {
+            if ((temp << 1) <= dividend1) {
+                temp = temp << 1;
+                counter += counter;
+            }
+            else {
+                dividend1 -= temp;
+                res += counter;
+                temp = divisor1;
+                counter = 1;
+            }
+        }
+
+        if (sign == 1) {
+            if (res <= INT_MAX) return res;
+            else return INT_MAX;
+        }
+        else {
+            if (res < abs(long(INT_MIN))) return -res;
+            else return INT_MIN;
+        }
+    }
+};
+
+
+Fibonacci sequence solution,
+
+class Solution {
+public:
+    int divide(int dividend, int divisor) {
+        int sign = 1;
+        if ((dividend > 0 && divisor < 0) || (dividend < 0 && divisor > 0))
+            sign = -1;
+
+        long dividend1 = abs(long(dividend));
+        long divisor1 = abs(long(divisor));
+        vector<long> fab = {0,divisor1,divisor1};
+        vector<long> counter = {0,1,1};
+        long res = 0;
+
+        while (fab[fab.size()-1] <= dividend1) {
+            fab.push_back(fab[fab.size()-1]+fab[fab.size()-2]);
+            counter.push_back(counter[counter.size()-1]+counter[counter.size()-2]);
+        }
+
+        while (dividend1 >= divisor1) {
+            auto index = upper_bound(fab.begin(),fab.end(),dividend1);
+            res += counter[index-fab.begin()-1];
+            dividend1 -= fab[index-fab.begin()-1];
+        }
+
+        if (sign == 1) {
+            if (res <= INT_MAX) return res;
+            else return INT_MAX;
+        }
+        else {
+            if (res < abs(long(INT_MIN))) return -res;
+            else return INT_MIN;
+        }
+    }
+};
+
+//第三种方法
+int divide(int dividend, int divisor) {
+        
+        double d1 = log(fabs(dividend));
+        double d2 = log(fabs(divisor));
+        
+        long long res = double(exp(d1 - d2));
+        if((dividend < 0)^(divisor < 0)) res = -res;
+        
+        if(res > INT_MAX) return INT_MAX;
+        return res;
+    }
