@@ -1,0 +1,82 @@
+class Solution {
+public:
+    int find(int low, int high, int target, vector<int>&nums){
+        if(low == high) return (nums[low] == target?low:-1);
+        if(low < high){
+            int mid = (high + low)/2;
+            if(nums[mid] == target)return mid;
+            if(nums[low] <= nums[mid]){
+                if(nums[low] <= target && target <= nums[mid])return find(low,mid,target,nums);
+                else return find(mid+1,high,target,nums);
+            }
+            else{
+                if(nums[mid+1] <= target && target <= nums[high])return find(mid+1,high,target,nums);
+                else return find(low,mid,target,nums);
+            }
+        }
+        return -1;
+    }
+    int search(vector<int>& nums, int target) {
+        return find(0,nums.size()-1,target,nums);
+    }
+};
+
+class Solution {
+public:
+    int search(vector<int>& nums, int target) {
+        int start = 0, end = nums.size()-1;
+        while(start <= end){
+            cout<<start<<" "<<end<<endl;
+            int mid = (start + end)/2;
+            if(target == nums[mid]){
+                return mid;
+            }
+            else if(nums[mid] >= nums[start]){// non-rotated array
+                if(target >= nums[start] && target < nums[mid])
+                    end = mid-1;
+                else
+                    start = mid+1;
+            }
+            else{// rotated array
+                if(target <= nums[end] && target > nums[mid])
+                    start = mid+1;
+                else
+                    end = mid-1;
+            }
+        }
+        cout<<start<<" "<<end<<endl;
+        return -1;
+    }
+};
+
+class Solution {
+public:
+    int find_pivot(const std::vector<int>& nums){
+        int result = 0;
+        int left = 0;
+        int right = nums.size() - 1;
+        do
+        {
+            int mid = (right + left) / 2;
+            if(nums[mid] > nums[right]){
+                left = mid;
+            }else{
+                right = mid;
+            }
+        }while( left < (right -1) );
+        
+        return nums[left]>nums[right]? left: -1;
+    }
+    
+    int search(vector<int>& nums, int target) {
+        if(nums.size() < 4){
+            auto res = std::find(begin(nums), end(nums), target);
+            return (res == std::end(nums))? -1: std::distance(begin(nums),res);
+        }
+        auto pivot = find_pivot(nums);
+        auto begin = (nums[0] > target)? std::begin(nums)+ pivot + 1: std::begin(nums);
+        auto end = (begin != std::begin(nums) || pivot == -1)? std::end(nums): std::begin(nums) + pivot + 1;
+        auto result = std::lower_bound(begin, end, target);
+        return (result != end) && (*result == target)? std::distance(std::begin(nums), result): -1;
+    }
+};
