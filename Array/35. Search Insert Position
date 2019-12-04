@@ -1,0 +1,27 @@
+int searchInsert(vector<int>& nums, int target) {
+	if (nums.empty()) return 0;
+
+	for (int i = 0; i < nums.size(); i++) {
+		// target found, return immediately
+		if (nums[i] == target)
+			return i;
+		
+		// insert first
+		if (i == 0 && nums[i] > target)
+			return 0;
+
+		// general case
+		if (i+1 < nums.size() && nums[i+1] > target)
+			return i+1; 
+	}
+	// insert at end
+	return nums.size();
+}
+
+
+class Solution {
+public:
+    int searchInsert(vector<int>& nums, int target) {
+        return distance(nums.begin(), lower_bound(nums.begin(), nums.end(), target));
+    }
+};
