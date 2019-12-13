@@ -1,0 +1,55 @@
+class Solution {
+public:
+    int to_dig(char c){return c - '0';}
+    char to_char(int n){return n + '0';}
+    
+    string multiply(string num1, string num2) {
+        if(num1[0] == '0' || num2[0] == '0')
+            return "0";
+        
+        //因为容器push_back操作都是添加在容器尾部，所以对两个string逆序，得到结果再逆序一次
+        reverse(num1.begin(),num1.end());
+        reverse(num2.begin(),num2.end());
+        
+        string ret;
+        int carry = 0;
+        
+        //类似乘法运算
+        //for each digit in num1
+        for(int i = 0; i < num1.size(); i++){
+            //and in num2
+            for(int j = 0; j < num2.size(); j++){
+                //multiply and add carry
+                int out = to_dig(num1[i]) * to_dig(num2[j]) + carry;
+                
+                //i -> number of places that will be skipped for each intermediate multiple in long multiplication.
+                //j -> target iterator as we walk through each digit in num2.
+                int out_idx = i + j;
+                
+                //if there is a partial result for this place, add out to that place.
+                if(out_idx < ret.length()){
+                    out += to_dig(ret[out_idx]);
+                    ret[out_idx] = to_char(out%10);
+                }
+                //else push new digit for that place.
+                else
+                    ret.push_back(to_char(out%10));
+                
+                //save the first digit as carry.
+                carry = out/10;
+            }
+            
+            //有进位的话，需要添加一位
+            //if there is a last carry for this intermediate multiple, push it too.
+            //reset it so that it doesnt get taken in twice.
+            if(carry){
+                ret.push_back(to_char(carry));
+                carry = 0;
+            }
+        }
+        
+        //reverse as explained before and get out.
+        reverse(ret.begin(), ret.end());
+        return ret;  
+    }
+};
