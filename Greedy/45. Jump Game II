@@ -1,0 +1,48 @@
+class Solution {
+public:
+    int jump(vector<int>& nums) {
+        if(nums.size()<2)
+            return 0;
+        int start=1;
+        int steps = 1;
+        int curAblePos = nums[0];//当前能够到达的最远位置
+        while (curAblePos<nums.size()-1){
+            int maxPos = INT_MIN;
+            for(int i=start;i<=curAblePos;i++){
+                if(nums[i]+i>maxPos){
+                    maxPos = i+nums[i];//在i位置时能够到达的最远位置
+                    start+=1;
+                }
+            }
+            curAblePos=maxPos;
+            steps++;
+        }
+        return steps;
+    }
+};
+
+
+class Solution {
+public:
+    int jump(vector<int>& nums) {
+        if(nums.empty())
+            return 0;
+        
+        vector<int> jumps(nums.size(), INT_MAX);
+        jumps[0] = 0;
+        
+        int maxIndex = 0;
+        for(int i = 0; i < nums.size() - 1; i++){
+            if(nums[i] + i > maxIndex){
+                for (int j = i + 1; j <= i + nums[i] && j < nums.size(); j++)
+                    jumps[j] = min(jumps[j], jumps[i] + 1);
+                maxIndex = nums[i] + i;
+            }
+            
+            if (maxIndex == nums.size() - 1)
+                return jumps[nums.size() - 1];
+        }
+        
+        return jumps[nums.size() - 1];
+    }
+};
