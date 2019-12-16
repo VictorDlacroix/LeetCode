@@ -1,0 +1,43 @@
+class Solution {
+public:
+    void rotate(vector<vector<int>>& matrix) {
+        int l = matrix.size() - 1;
+        
+        //先沿矩阵副对角线对称变换
+        for(int i = 0; i < l; ++i)
+            for(int j = 0; j < l - i; ++j)
+                swap(matrix[i][j], matrix[l - j][l - i]);
+        
+        //再沿中间行对称变换
+        for(int i = 0; i < (l + 1)/2; ++i)
+            for(int j = 0; j <= l; ++j)
+                swap(matrix[i][j], matrix[l - i][j]);
+        
+    }
+};
+
+
+void rotate(vector<vector<int>>& matrix) 
+{
+	// rotate by 90 deg clockwise - transpose columns to rows from left.
+	// walk right to the backward leaning diagonal, as elements to the left 
+	// have already been put in place when traversing previous rows.
+	for (int i = 0; i < matrix.size (); i++)
+		for (int j = i; j < matrix[0].size (); j++) 
+			swap (matrix [i][j], matrix [j][i]);
+
+	// rotate by 180 deg - swap rows from top to bottom.
+	/*for (int i = 0, j = matrix.size ()-1; i < j; i++, j--)
+		swap (matrix [i], matrix [j]);*/
+
+	// rotate by 270 deg clockwise - transpose columns to rows from right.
+	// walk left to the forward leaning diagonal.
+	/*for (int i = 0; i < matrix.size (); i++)
+		for (int j = matrix.size () - 1 - i; j >= 0; j--)
+			swap (matrix [i][j], matrix [matrix.size () - 1 - j][matrix.size () - 1 - i]);*/
+
+	// reverse
+	for (int i = 0; i < matrix.size (); i++)
+		for (int j = 0, k = matrix[0].size ()-1; j < k; j++, k--)
+			swap (matrix [i][j], matrix [i][k]);
+}
