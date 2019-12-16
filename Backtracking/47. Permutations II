@@ -1,0 +1,43 @@
+//与上一题类似
+
+class Solution {
+public:
+    void cs(vector<int> nums, int index, vector<vector<int>>& res){
+        if(index == nums.size()){
+            res.emplace_back(nums);
+            return;
+        }
+        for(int i = index; i < nums.size(); i++){
+        //与上一题不同的地方，在于这个判断条件
+            if(i == index || nums[i] != nums[index]){
+                swap(nums[i], nums[index]);
+                cs(nums, index + 1, res);
+            }
+        }
+    }
+        
+        
+    vector<vector<int>> permuteUnique(vector<int>& nums) {
+        vector<vector<int>> res;
+        sort(nums.begin(), nums.end());
+        cs(nums, 0, res);
+        return res;
+    }
+};
+
+
+
+class Solution {
+public:
+    vector<vector<int>> permuteUnique(vector<int>& nums) {
+        vector< vector<int> > ans;
+        std::sort(nums.begin(), nums.end());
+        
+        do {
+            vector<int> temp = nums;
+            ans.push_back(nums);
+        } while (std::next_permutation(nums.begin(),nums.end()));
+        
+        return ans;
+    }
+};
