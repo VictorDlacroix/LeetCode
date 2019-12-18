@@ -1,0 +1,30 @@
+class Solution {
+public:
+//使用long long可以解决界限问题
+    double myPow(double x, long long n) {
+        if(n == 0) return 1.0;
+        if(n < 0) return 1.0 / myPow(x, -n);
+        double tmp = myPow(x, n >> 1);
+        return tmp * tmp * (n & 1? x : 1);
+    }
+};
+
+
+
+class Solution {
+public:
+    inline double myPow(double x, long long n) {
+        double result = 1;
+        if(n < 0) {
+            return (double)1 / myPow(x, -n);
+        }
+        while(n > 0) {
+            if(n%2 == 1) {
+                result = result * x;
+            }
+            x *= x;
+            n /= 2;
+        }
+        return result;
+    }
+};
