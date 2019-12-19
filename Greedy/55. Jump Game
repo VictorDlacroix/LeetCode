@@ -1,0 +1,24 @@
+class Solution {
+public:
+    using Itr = std::vector<int>::const_reverse_iterator;
+    
+    //Arg1 :starting location for iteration in reverse order
+    //Arg2 :Last element + 1 in reverse order
+    //Arg3 :Pointer to element that must be reachable, If reachable then update it to current location
+    //Arg4 :Final distination pointer 
+     bool solutionExists(Itr stitr, Itr enditr, Itr refitr, const Itr dstitr) const
+    {
+        for (auto itr = stitr; itr != enditr; ++itr) {
+            if (*itr >= std::distance(refitr, itr))
+                refitr = itr;
+        }
+        return refitr == dstitr;
+    }
+    
+    bool canJump(vector<int>& nums) {
+        auto start_itr = nums.crbegin();
+        std::advance(start_itr, 1);
+        auto dst_itr = nums.crbegin() + (std::distance(nums.crbegin(), nums.crend()) - 1);
+        return solutionExists(start_itr, nums.crend(), nums.crbegin(), dst_itr);
+    }
+};
