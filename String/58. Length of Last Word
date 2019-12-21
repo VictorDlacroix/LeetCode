@@ -1,0 +1,40 @@
+class Solution {
+public:
+    int lengthOfLastWord(string s) {
+        int len = 0, tail = s.length() - 1;
+        while(tail >= 0 && s[tail] == ' ')tail--;
+        while(tail >= 0 && s[tail] != ' '){
+            tail--;
+            len++;
+        }
+        return len;
+    }
+};
+
+
+
+class Solution {
+public:
+    int lengthOfLastWord(string s) {
+        int counter = 0;
+        int j = s.size();
+        //设置一个标记位
+        bool spaceBefore = true;
+        for(int i = j-1; i>=0; i--)
+        {
+            
+            if (s[i] != ' ')
+            {
+                counter +=1;
+                //标记位为false，说明碰到第一个单词
+                spaceBefore = false;
+            }
+              else
+              {
+                  if(!spaceBefore)
+                  break;
+              }
+        }
+        return counter;
+    }
+};
