@@ -1,0 +1,66 @@
+class Solution {
+public:
+    vector<vector<int>> generateMatrix(int n) {
+        vector<vector<int>> res(n, vector<int> (n));
+        int up = 0, left = 0, down = n - 1, right = n - 1, k = 1;
+        while(k <= n * n){
+            int j = left;
+            while(j <= right) res[up][j++] = k++;
+            up++;
+            j = up;
+            while(j <= down) res[j++][right] = k++;
+            right--;
+            j = right;
+            while(j >= left) res[down][j--] = k++;
+            down--;
+            j = down;
+            while(j >= up) res[j--][left] = k++;
+            left++;
+        }
+        return res;
+    }
+};
+
+
+
+
+vector<vector<int>> generateMatrix(int n) 
+  {
+      vector<vector<int>> spiral(n, vector<int>(n, 1));
+      if (n < 2)
+          return spiral;
+      int num = 1;
+      int upperRow = n - 1;
+      int lowerRow = 0;
+      while (upperRow >= lowerRow)
+      {
+          // Upper Row
+          for (int i = lowerRow; i <= upperRow; ++i)
+          {
+              spiral[lowerRow][i] = num++;
+          }
+          if (upperRow > lowerRow)
+          {
+              // Right Column
+              for (int i = lowerRow + 1; i <= (upperRow - 1); ++i)
+              {
+                  spiral[i][upperRow] = num++;
+              }
+              // Lower Row
+              for (int i = upperRow; i >= lowerRow; --i)
+              {
+                  spiral[upperRow][i] = num++;
+              }
+              // Left Column
+              for (int i = upperRow - 1; i >= (lowerRow + 1); --i)
+              {
+                  spiral[i][lowerRow] = num++;
+              }
+         
+          }
+          
+          lowerRow++;
+          upperRow--;
+      }
+      return spiral;
+  }
