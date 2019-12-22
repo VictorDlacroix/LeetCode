@@ -1,0 +1,44 @@
+//使用stl种next_permutation方法
+
+class Solution {
+public:
+    string getPermutation(int n, int k) {
+        if(k == 0 || n == 0)return "";
+        string res;
+        for(int i = 1; i <= n; i++){
+            res += to_string(i);
+        }
+        while(k > 0){
+            if(k == 1)return res;
+            next_permutation(res.begin(),res.end());
+            k--;  
+        }
+        return res;
+    }
+};
+
+
+
+//这种方法比较巧妙，可参见解析
+class Solution {
+public:
+    string getPermutation(int n, int k) {
+        // create set and value of n!
+        vector<int> nums;
+        string res;
+        int nSubcase = 1;      // n!
+        for(int i = 1; i <= n; i++){
+            nums.push_back(i);  
+            nSubcase *= i;
+        } 
+        // iteration
+        for(; n > 0; n--){
+            nSubcase /= n;  // current num of possible subsets if picking any integer
+            int pickID = (k - 1) / nSubcase;
+            res += '0' + nums[pickID];
+            nums.erase(nums.begin() + pickID);
+            k -= pickID * nSubcase; // calculate next k
+        }
+        return res;
+    }
+};
