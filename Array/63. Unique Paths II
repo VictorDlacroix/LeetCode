@@ -1,0 +1,19 @@
+class Solution {
+public:   
+    int uniquePathsWithObstacles(vector<vector<int>>& obstacleGrid) {
+        //获取行数
+        int m = obstacleGrid.size();
+        //获取列数
+        int n = obstacleGrid[0].size();
+        
+        vector<vector<long>> res(m+1, vector<long>(n+1, 0));
+        res[1][0] = 1;
+        for(int i = 1; i < m+1; i++){
+            for(int j = 1; j < n+1; j++){
+                if(obstacleGrid[i-1][j-1] == 1)res[i][j] = 0;
+                else res[i][j] = res[i-1][j] + res[i][j-1];
+            }
+        }       
+        return res[m][n];
+    }
+};
