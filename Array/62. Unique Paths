@@ -1,0 +1,26 @@
+class Solution {
+public:
+    int uniquePaths(int m, int n) {
+        //在数学中，其实就是排列组合问题。
+        //m行n列：有m-1个down操作，n-1个right操作
+        int N = m + n - 2;
+        int k = m - 1;
+        int64_t res = 1;
+        for(int i = 1; i <= k; i++){
+            //注意这里不能用res *= (N - k + i) / i;，因为这会强制把*=右边的式子转化为int再计算
+            res = res * (N - k + i) / i;
+        }
+        return res;
+    }
+};
+
+//以下做法在leetcode超时
+/*
+class Solution {
+public:
+    int uniquePaths(int m, int n) {
+        if(m == 1 || n == 1)return 1;
+        return uniquePaths(m - 1, n) + uniquePaths(m, n - 1);
+    }
+};
+*/
