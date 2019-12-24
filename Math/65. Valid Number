@@ -1,0 +1,61 @@
+class Solution {
+public:
+    bool isNumber(string s) {
+        bool isSign = false;
+        bool isDot = false;
+        bool isExp = false;
+        bool isNum = false;
+        
+        s.erase(0, s.find_first_not_of(" "));
+        s.erase(s.find_last_not_of(" ") + 1);
+        
+        int len = s.size();
+        if(len == 0)
+            return false;
+        for(int i = 0; i < len; i++){
+            if(s[i] == ' ')
+                return false;
+            if(isalpha(s[i]))
+            {
+                if(s[i] == 'e')
+                {
+                    if(isNum == false || isExp == true)  // no number or double exp
+                        return false;
+                    else
+                    {
+                        isExp = true;
+                        isNum = false;
+                        isSign = false;
+                        isDot = false;
+                    }
+                }
+                else
+                    return false;
+            }
+            else if(isdigit(s[i]))
+                isNum = true;
+            else if(s[i] == '+' || s[i] == '-')
+            {
+                // double sign or sign after number or not
+                if(isSign == true || isNum == true || isDot == true)
+                    return false;
+                else
+                    isSign = true;
+            }
+            else if(s[i] == '.')
+            {
+                if(isExp == true || isDot == true)  // double dot or dot after exp
+                    return false;
+                else
+                    isDot = true;
+            }
+        }
+        
+        // '.', 'e', '+' or '-' without number
+        if((isDot == true || isSign == true || isExp == true)&& isNum == false)
+            return false;
+        else
+            return true;
+
+    }
+};
