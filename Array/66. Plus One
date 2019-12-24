@@ -1,0 +1,18 @@
+class Solution {
+public:
+    vector<int> plusOne(vector<int>& digits) {
+        //这道题使用乘法来做，因为vector长度可以超过计算机表示的上限。
+        //reverse的返回值为void
+        for(int i = digits.size() - 1; i >= 0; i--){
+            //如果这一位上的数字为9，那么将其置0，继续循环
+            if(digits[i] == 9) digits[i] = 0;
+            else{
+                digits[i]++;
+                return digits;
+            }
+        }
+        //如果都是9，就在最前面插入1
+        digits.emplace(digits.begin(), 1);
+        return digits;
+    }
+};
