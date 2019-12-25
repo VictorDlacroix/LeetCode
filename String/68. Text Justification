@@ -1,0 +1,161 @@
+class Solution {
+public:
+    vector<string> fullJustify(vector<string>& words, int maxWidth) {
+        int r = 0;
+        vector<string> ans;
+        while(r < words.size()){
+            int sum = 0;
+            int l = r;
+            int count = 0;
+            bool lastLine = false;
+            while(r < words.size()){
+                sum += words[r++].size();
+                if(sum + count >= maxWidth)break;
+                count++; // for space needed between words
+            }
+            // remove one word if exceeds maxWidth
+            if (sum + count > maxWidth && r <= words.size()) {
+                sum -= words[--r].size();
+                count-- ;
+            }
+			// special case for last line
+            if (r == words.size()) lastLine = true;
+                
+            int spaces = maxWidth - sum; 
+            int avg = 1;   // average spaces between words
+            int leftOver = 0;  
+            string oneAns;
+            if (count > 0) {
+                avg = spaces/count;
+                leftOver = spaces % count;
+            }
+            for (int i = l; i < r-1; ++i) {
+                oneAns.append(words[i]);
+                if ( !lastLine) {
+                    int padding = avg + (leftOver-- > 0 ? 1 : 0);
+                    oneAns.append(string(padding, ' '));
+                } else {
+                    oneAns.append(" ");
+                }
+            }
+            oneAns.append(words[r-1]);
+			
+			// special for last line, padding at the end
+            if (oneAns.size() < maxWidth) {
+                oneAns.append(string(maxWidth-oneAns.size(), ' '));
+            }
+
+            ans.push_back(oneAns);
+            // cout << "\"" << oneAns << "\"" << endl;
+            oneAns.clear();
+        }
+        return ans;
+    }
+};
+
+
+
+
+class Solution
+{
+public:
+    const char alpha = ' '; // change to star for easy testing/debugging
+    string util(int n)
+    {
+        // returns n characters in the form of string util(5) -> *****
+        return string(n, alpha);
+    }
+
+    vector<string> fullJustify(vector<string> &words, int maxWidth)
+    {
+
+        /*
+        
+        Algorithm
+
+        startIndex -> used for tracking gaps from the first word in our 
+        list to current word
+        
+        currWords -> stores all words whose combined width (gaps inclusive) is less than maxWidth
+        
+        paddings -> list of " " string for each word in our list, which will be appended to each word prior to returning final result
+        
+        This algo uses a greedy approach to fit the most words less than max width and to fit the most spaces in the least number of gaps after adjusting the gaps for uniform space.
+        
+        Algo:
+        1. Find all words whose combined width( accounting for gap of one for each word) is less than maxWidth.
+        2. Find the total padding which can be added to each word to make the whole container width equal to maxWidth.
+        3. Find the extra padding and append it uniformly to the first few words.
+        4. Append the spaces to every word in the list except the last.
+        5. Return final result
+        
+        */
+
+        int currentIndex = 0, startIndex = 0, width = 0, size = words.size();
+        vector<string> currWords, paddings, result;
+
+        while (currentIndex < size)
+        {
+
+            int gaps = currentIndex - startIndex + 1; // 2 words will have 1 gap. 3 words will have 2 gaps and so on...
+            bool isLastWord = currentIndex == size - 1;
+
+            width += words[currentIndex].size();
+            currWords.push_back(words[currentIndex]); // store all words so far
+
+            if (isLastWord or width + (words[currentIndex + 1].size()) + gaps > maxWidth)
+            {
+
+                int numWords = currWords.size();
+
+                if (numWords == 1)
+                {
+                    result.push_back(currWords[0] + util(maxWidth - currWords[0].size()));
+                    currWords = vector<string>();
+                    startIndex = currentIndex + 1;
+                    width = 0;
+                    currentIndex++;
+                    continue;
+                }
+
+                int padding = maxWidth - width; // extra width which will be used for spaces
+                gaps = numWords - 1;
+
+                int spaces = padding / gaps, extras = padding % gaps, k = 0;
+                // find space per word for our line, and the extras
+                string line = "";
+
+                if (isLastWord)
+                {
+                    // last line doesnt have extra spaces
+                    spaces = 1;
+                    extras = 0;
+                }
+
+                paddings = vector<string>(numWords, util(spaces));
+
+                while (k < extras)
+                {
+                    paddings[k] += alpha;
+                    k++;
+                }
+
+                k = 0;
+                for (auto i : currWords)
+                    line += i + ((k == paddings.size() - 1) ? "" : paddings[k++]); // pad every word except the last.
+
+                if (line.size() < maxWidth)
+                    line += util(maxWidth - line.size()); // if any space left after last word add extra space to the right.
+
+                result.push_back(line);       // add to final result
+                currWords = vector<string>(); // reset for next set of words
+
+                startIndex = currentIndex + 1;
+                width = 0;
+            }
+            currentIndex++;
+        }
+
+        return result;
+    }
+};
