@@ -1,0 +1,49 @@
+//很精彩的做法
+class Solution {
+public:
+    void sortColors(vector<int>& nums) {
+        int left = 0, right = nums.size() - 1;
+        int count = 0;
+        while(count <= right){
+            if(nums[count] == 0){
+                swap(nums[count++], nums[left++]);
+            }
+            else if(nums[count] == 1){
+                count++;
+            }
+            else
+            //这里注意count是不加的
+                swap(nums[count], nums[right--]);
+        }
+    }
+};
+
+//时间复杂度比较高
+void sortColors(vector& nums) {
+int len = nums.size();
+int cnt = 0;
+for(int i = 0;i<len;i++){
+if(nums[i]==0)swap(nums[i],nums[cnt++]);
+}
+for(int i = 0;i<len;i++){
+if(nums[i]==1)swap(nums[i],nums[cnt++]);
+}
+for(int i = 0;i<len;i++){
+if(nums[i]==2)swap(nums[i],nums[cnt++]);
+}
+}
+
+//也是比较巧妙的做法
+class Solution {
+public:
+void sortColors(vector& nums) {
+int zeros = 0 , ones = 0;
+zeros = count(nums.begin(),nums.end(), 0);
+ones = count(nums.begin(),nums.end(), 1);
+for(int i = 0 ; i < nums.size() ;i++){
+if(zeros) nums[i] = 0 , zeros--;
+else if (ones) nums[i] = 1 , ones--;
+else nums[i] = 2;
+}
+}
+};
