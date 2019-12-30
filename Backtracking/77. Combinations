@@ -1,5 +1,53 @@
 class Solution {
 public:
+    void DFS(int n, int k, int start, int left, vector<int>& c){
+        if(c.size() == k){
+            res.push_back(c);
+            return;
+        }
+        for(int i = start; i <= n - left + 1; i++){
+            c.push_back(i);
+            DFS(n, k, i + 1, left - 1, c);
+            c.pop_back();
+        }
+    }
+    
+    vector<vector<int>> combine(int n, int k) {
+        if(n <= 0 || k <= 0 || n < k)
+            return res;
+        vector<int> c;
+        DFS(n, k, 1, k, c);
+        return res;
+    }
+private:
+    vector<vector<int>> res;
+};
+
+
+class Solution {
+public:
+    vector<vector<int>> combine(int n, int k) {
+        vector<vector<int>> res;
+        vector<int> p(k, 0);
+        int i = 0;
+        while(i >= 0){
+            p[i]++;
+            if(p[i] > n)
+                i--;
+            else if(i == k - 1)
+                res.push_back(p);
+            else{
+                i++;
+                p[i] = p[i - 1];
+            }
+        }
+        return res;
+    }
+};
+
+
+class Solution {
+public:
     vector<vector<int>> combine(int n, int k) {
         vector<vector<int>> result;
         
