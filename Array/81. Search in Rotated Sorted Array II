@@ -1,0 +1,96 @@
+class Solution {
+public:
+    bool search(vector<int>& nums, int target) {
+        int left = 0, right = nums.size() - 1;
+        
+        // There are two scenarios. One where the array is rotated and one 
+        // where it is not.
+		
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] == target) { // Obvious solution
+                return true;
+            // Ascending from mid to right.
+            } else if (nums[mid] < nums[right]) {
+                // If the target is within the right half
+                if (nums[mid] < target && target <= nums[right]) {
+                    left = mid + 1;
+                } else {
+                    right = mid - 1;
+                }
+                // Ascending from left to mid.
+            } else if (nums[mid] > nums[right]) {
+                // Look if number is in the left half.
+                if (nums[left] <= target && target < nums[mid]) {
+                    right = mid - 1;
+                } else {
+                    left = mid + 1;
+                }       
+            } else {
+                // nums[mid] == nums[right], move mid one to the left.
+                // For instance, if we have
+                // 2,3,4,5,1,1,1,1,1,1,1,1,1,1,1
+                right--;
+            }
+        }
+        return false;
+    }
+};
+
+
+class Solution {
+private:
+    int findPivot(int low, int high, const vector<int>& nums) {        
+        int comparison = nums[low];
+        while (low <= high) {
+            int mid = low + (high - low)/2;
+            
+            if (mid == nums.size()-1 || nums[mid] > nums[mid+1]) {
+                return mid;
+            } else if (nums[mid] > comparison) {
+                low = mid+1;
+            } else if (nums[mid] == comparison) {
+                int leftRes = findPivot(low, mid-1, nums);
+                int rightRes = findPivot(mid+1, high, nums);
+                
+                return min(leftRes, rightRes);
+            } else {
+                high = mid-1;
+            }
+        }
+        
+        return nums.size()-1;
+    }
+    
+    bool bSearch(int low, int high, int target, const vector<int>& nums) {
+        while (low <= high) {
+            int mid = low + (high - low)/2;
+            
+            if (nums[mid] == target) {
+                return true;
+            } else if (nums[mid] > target) {
+                high = mid-1;
+            } else {
+                low = mid+1;
+            }
+        }
+        
+        return false;
+    }
+public:
+    bool search(const vector<int>& nums, int target) {
+        if (nums.empty())
+            return false;
+        
+        int pivot = findPivot(0, nums.size()-1, nums);
+        int pivotVal = nums[pivot];
+        
+        if (nums[0] <= target && target <= pivotVal) {
+            return bSearch(0, pivot, target, nums);
+        } else {
+            return bSearch(pivot+1, nums.size()-1, target, nums);
+        }
+        
+        return false;
+    }
+};
