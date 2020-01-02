@@ -1,0 +1,35 @@
+class Solution {
+public:
+    int removeDuplicates(vector<int>& nums) {
+        if(nums.size() < 3) return nums.size();
+        int count = 0;
+        for(int i = 0; i < nums.size() - 2; i++){
+            if(nums[i] == nums[i + 1] && nums[i] == nums[i + 2])
+            {
+                nums[i] = INT_MAX;
+                count++;
+            }
+        }
+        sort(nums.begin(), nums.end());
+        return nums.size() - count;
+    }
+};
+
+
+class Solution {
+public:
+    int removeDuplicates(vector<int>& nums) {
+        if(nums.size() < 3) return nums.size();
+        //i可以小于num.size()-1，也可以小于num.size()-2
+        for(int i = 0; i < nums.size() - 2; i++){
+            if(nums[i] == nums[i + 1])
+            {
+                while(i + 2 < nums.size() && nums[i + 2] == nums[i])
+                //自动更新i,注意这里不能是迭代器，因为迭代器被erase后，后面的迭代器都会失效。
+                    nums.erase(nums.begin() + i + 2);
+            }
+        }
+        
+        return nums.size();
+    }
+};
