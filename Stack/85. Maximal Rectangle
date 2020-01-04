@@ -1,0 +1,53 @@
+//based on 84.MAX AREA RECTANGLE IN A HISTOGRAM
+class Solution {
+private:
+//这个就是84题的解法
+    int maxarea(vector<int> v){
+        int n = v.size(), i = 0, res = 0, curr = 0;
+        stack<int> s;
+        while(i < n){
+            if(s.empty() || v[s.top()] <= v[i]){
+                s.push(i);
+                i++;
+            }
+            else{
+                curr = s.top();
+                s.pop();
+                if(s.empty())
+                    res = max(res, v[curr] * i);
+                else
+                    res = max(res, (i - s.top() - 1) * v[curr]);
+            }
+        }
+        while(!s.empty()){
+            curr = s.top();
+            s.pop();
+            if(s.empty())
+                res = max(res, v[curr] * i);
+            else
+                res = max(res, (i - s.top() - 1) * v[curr]);
+        }
+        return res;
+    }
+    
+public:
+    int maximalRectangle(vector<vector<char>>& matrix) {
+        int n = matrix.size(), res = 0;
+        if(n == 0) return 0;
+        int m = matrix[0].size();
+        vector<int> v(m, 0);
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < m; j++){
+                if(matrix[i][j] == '0')
+                    v[j] = 0;
+                else
+                    v[j]++;
+            }
+            //注意是在每行计算一次最大面积
+            //中间有‘0’将重新从0开始
+            int x = maxarea(v);
+            res = max(res, x);
+        }
+        return res;
+    }
+};
