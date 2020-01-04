@@ -1,0 +1,129 @@
+//执行的时间比较长，可能出现超时的情况
+class Solution {
+public:
+    int largestRectangleArea(vector<int>& heights) {
+        if(heights.empty()) return 0;
+        int rt = 0;
+        
+        for(int i=0; i<heights.size(); i++){
+            int t = heights[i], left = i-1, right = i+1;
+            while(left>=0 && heights[left] >= t) left--;
+            while(right<heights.size() && heights[right]>=t) right++;
+            rt = max(rt, t*(right-left-1));
+        }
+        return rt;
+    }
+};
+
+
+
+//很好的解释！
+The idea is simple: suppose a rectangle contains the column i and has a height heights[i], then the max area of the rectangle will be heights[i] * (rb[i] - lb[i] - 1). Here we define:
+
+lb[i]: the index of first column on the left of i whose height is lower than heights[i].
+rb[i]: the index of first column on the right of i whose height is lower than heights[i].
+We first scan the heights array and use a stack to construct lb[i] and rb[i]. After that, we scan heights again and calculate heights[i] * (rb[i] - lb[i] - 1) to get the max possible area.
+
+class Solution {
+public:
+    int largestRectangleArea(vector<int>& heights) {
+        int N = heights.size();
+        stack<int> st;
+        // construct lb[i]: idx of first col on the left that is lower than height[i]
+        vector<int> lb(N);
+        for (int i(0); i < N; ++i) {
+            while (!st.empty() and heights[st.top()] >= heights[i]) {
+                st.pop();
+            }
+            if (st.empty()) {
+                lb[i] = -1;
+                st.push(i);
+            }
+            else {
+                lb[i] = st.top();
+                st.push(i);
+            }
+        }
+        
+        // clear stack
+        while (!st.empty()) st.pop();
+        
+        // construct rb[i]: idx of first col on the right that is lower than height[i]
+        vector<int> rb(N);
+        for (int i(N-1); i >= 0; --i) {
+            while (!st.empty() and heights[st.top()] >= heights[i]) {
+                st.pop();
+            }
+            if (st.empty()) {
+                rb[i] = N;
+                st.push(i);
+            }
+            else {
+                rb[i] = st.top();
+                st.push(i);
+            }
+        }
+        
+        // scan each col and get max area
+        int rst = 0;
+        for (int i(0); i < N; ++i) {
+            rst = max(rst, 
+                     heights[i] * (rb[i] - lb[i] - 1)
+                     );
+        }
+        return rst;
+    }
+};
+
+
+class Solution {
+public:
+    int largestRectangleArea(vector<int>& heights) {
+        stack<int> stk;
+        int max_area = 0;
+        int i = 0;
+        while(i < size(heights)){
+            if(empty(stk) || heights[i] >= heights[stk.top()])
+                stk.push(i++);
+            else{
+                int top = stk.top();
+                stk.pop();
+                int w = empty(stk) ? i : (i - stk.top() - 1);
+                max_area = max(max_area, heights[top] * w);
+            }
+        }
+        while(!empty(stk)){
+            int top = stk.top();
+            stk.pop();
+            int w = empty(stk) ? i : (i - stk.top() - 1);
+            max_area = max(max_area, heights[top] * w);        
+        }
+        return max_area;
+    }
+};
+
+
+
+//与上面一个方法类似
+class Solution {
+public:
+    int largestRectangleArea(vector<int>& heights) {
+        int maxArea = 0;
+        vector<int> height(heights);
+        height.push_back(0);
+        stack<int> increHeight;
+        int i = 0;
+        while(i < height.size()){
+            if(increHeight.empty() || height[i] >= height[increHeight.top()]){
+                increHeight.push(i++);
+            }
+            else{
+                int topIndex = increHeight.top();
+                increHeight.pop();
+                int width = increHeight.empty()? i : (i-increHeight.top()-1);
+                maxArea = max(maxArea, width*height[topIndex]);
+            }
+        }
+        return maxArea;
+    }
+};
