@@ -1,0 +1,34 @@
+class Solution {
+public:
+    bool isScramble(string s1, string s2) {
+        if(s1.size() != s2.size())
+            return false;
+        if(s1 == s2)
+            return true;
+        unordered_map<char, int> f2, f2_r;
+        for(int i = 0; i < s1.size() - 1; ++i){
+            if(++f2[s1[i]] == 0)
+                f2.erase(s1[i]);
+            if(++f2_r[s1[i]] == 0)
+                f2_r.erase(s1[i]);
+            if(--f2[s2[i]] == 0)
+                f2.erase(s2[i]);
+            if(--f2_r[s2[s2.size() - 1 - i]] == 0)
+                f2_r.erase(s2[s2.size() - 1 - i]);
+            
+            if(f2.size() == 0){
+                bool left = isScramble(s1.substr(0, i + 1), s2.substr(0, i + 1));
+                bool right = isScramble(s1.substr(i + 1), s2.substr(i + 1));
+                if(left && right)
+                    return true;
+            }
+            if(f2_r.size() == 0){
+                bool left = isScramble(s1.substr(0, i + 1), s2.substr(s2.size() - 1 - i));
+                bool right = isScramble(s1.substr(i + 1), s2.substr(0, s2.size() - 1 - i));
+                if(left && right)
+                    return true;
+            }
+        }
+        return false;
+    }
+};
