@@ -1,0 +1,21 @@
+//这个方法可以进一步简化，当nums2元素全部放入容器后，就没有必要进行下去了
+
+class Solution {
+public:
+    void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
+        int i = m - 1, j = n - 1;
+        int k = m + n - 1;
+        for(int l = 0; l < (m + n); l++){
+            //i小于0，说明nums1元素已经都放入容器了，这时候把nums2的所有元素放入
+            if(i < 0)
+                nums1[k--] = nums2[j--];
+            //j小于0，说明nums2元素已经都放入容器了，这时候把nums1的所有元素放入
+            else if(j < 0)
+                nums1[k--] = nums1[i--];
+            else if(nums1[i] < nums2[j])
+                nums1[k--] = nums2[j--];
+            else
+                nums1[k--] = nums1[i--];
+        }
+    }
+};
