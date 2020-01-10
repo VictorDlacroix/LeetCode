@@ -1,0 +1,88 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* reverseBetween(ListNode* head, int m, int n) {
+        if(head == NULL) return NULL;
+        if(m == n) return head;
+        
+        ListNode* newhead = new ListNode(0);
+        newhead->next = head;
+        
+        int i = 1;
+        ListNode* curr = head;
+        ListNode* sHead = newhead;
+        ListNode* pre = newhead;
+        
+        while(i <= n){
+            if(i >= m && i <= n){
+                ListNode* pnext = curr->next;
+                curr->next = pre;
+                pre = curr;
+                curr = pnext;
+                i++;
+                continue;
+            }
+            i++;
+            sHead = curr;
+            pre = curr;
+            curr = curr->next;
+        }
+        ListNode* pnext = sHead->next;
+        sHead->next = pre;
+        pnext->next = curr;
+        return newhead->next;
+    }
+};
+
+
+
+class Solution {
+public:
+    ListNode* reverseBetween(ListNode* head, int m, int n) {
+        // if(m == n){
+        //     return head;
+        // }
+        
+        if(head->next == nullptr){
+            return  head;
+        }
+        
+        ListNode *l =  head; //башка, потом присоединить
+        ListNode *bl = nullptr; //до башки 
+        for(int i = 0; i < m-1; ++i){ //l = m
+            bl = l;
+            l = l->next;             
+        }
+        
+        ListNode *fir = bl;
+        ListNode *nx = l;
+        ListNode *sec = nullptr;                             
+        int dif = n - m;
+        
+        while(dif >= 0){
+            --dif;
+            sec = l->next;
+            l->next = bl;
+            bl = l;
+            l = sec;
+        }
+        
+        if(fir != nullptr){
+            fir->next = bl;
+        } 
+        else{
+            head = bl;
+        }
+        
+        nx->next = l;
+        return head;
+        
+    }    
+};
