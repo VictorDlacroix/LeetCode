@@ -1,0 +1,30 @@
+//二叉树中序遍历（Inorder Traversal），先访问左子树，再访问根节点，最后访问右子树
+//遍历二叉树有三种方法，一种是递归，第二种是使用stack，第三种是Morris Traversal方法
+//可以查看提供的解答
+//或者参考标签：一马当先/C++/Morris Traversal方法遍历二叉树...
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    void inorder(TreeNode* node, vector<int>& result)
+    {
+        if(node == NULL) return;
+        inorder(node->left, result);
+        result.push_back(node->val);
+        inorder(node->right, result);
+    }
+    
+    vector<int> inorderTraversal(TreeNode* root) {
+        vector<int> result;
+        inorder(root, result);
+        return result;
+    }
+};
