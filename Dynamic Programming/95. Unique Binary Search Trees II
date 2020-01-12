@@ -1,0 +1,86 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<TreeNode*> gen(int l, int r){
+        if(l > r) return {nullptr};
+        if(l == r) return {new TreeNode(l)};
+        vector<TreeNode*> ans;
+        for(int i = l; i <= r; ++i){
+            //左右都是一个容器，分别构建左子树和右子树
+            vector<TreeNode*> leftL = gen(l, i - 1);
+            vector<TreeNode*> rightL = gen(i + 1, r);
+            for(auto &left : leftL){
+                for(auto &right : rightL){
+                    TreeNode* head = new TreeNode(i);
+                    head->left = left;
+                    head->right = right;
+                    ans.push_back(head);
+                }
+            }
+        }
+        return ans;
+    }
+    
+    vector<TreeNode*> generateTrees(int n) {
+        if(n < 1) return {};
+        return gen(1, n);
+    }
+};
+
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    
+    vector<TreeNode*> generateBst(int st, int en) {
+     vector<TreeNode*> ret;
+      
+      if (st>en) {
+        ret.push_back(NULL);
+        return ret;
+      }
+     if (st==en) {
+       TreeNode* node = new TreeNode(st);
+       ret.push_back(node);
+       return ret;
+     }
+     for (int i=st; i<=en; i++) {
+      vector<TreeNode*> left = generateBst(st,i-1);
+      vector<TreeNode*> right = generateBst(i+1,en);
+      for (int j=0; j<left.size(); j++){
+        for (int k=0; k<right.size(); k++) {
+          TreeNode* node = new TreeNode(i);
+          node->right = right[k];
+          node->left = left[j];
+          ret.push_back(node);
+        }
+      }
+     }
+    return ret;      
+  }
+    
+    vector<TreeNode*> generateTrees(int n) {
+      
+      if (n==0) {
+        vector<TreeNode*> res;
+         return res;
+      }
+      return generateBst(1,n);
+    }
+};
