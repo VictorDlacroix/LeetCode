@@ -1,0 +1,55 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<vector<int>> result;
+    void travel(TreeNode *node, int depth) {
+        if(!node) return;
+        if(result.size() == depth) {
+            result.resize(depth+1);
+        }
+        result[depth].push_back(node->val);
+        travel(node->left, depth+1);
+        travel(node->right, depth+1);
+    }
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        travel(root, 0);
+        return result;
+    }
+};
+
+
+class Solution {
+public:
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        vector<vector<int>> result;
+        if(!root) return result;
+        queue<TreeNode*> tree_queue;
+        tree_queue.push(root);
+        while(!tree_queue.empty()){
+            vector<int> tmp;
+            int queue_size = tree_queue.size();
+            while(queue_size--){
+                TreeNode* tmp_node = tree_queue.front();
+                tree_queue.pop();
+                if(tmp_node->left != NULL){
+                //队列的入队方式采用的是push
+                    tree_queue.push(tmp_node->left);
+                }
+                if(tmp_node->right != NULL){
+                    tree_queue.push(tmp_node->right);
+                }
+                tmp.push_back(tmp_node->val);
+            }
+            result.push_back(tmp);
+        }
+        return result;
+    }
+};
