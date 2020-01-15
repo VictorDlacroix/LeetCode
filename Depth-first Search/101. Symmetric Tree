@@ -1,0 +1,73 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    bool isSymmetric(TreeNode* root1, TreeNode* root2){
+        if(!root1 && !root2)
+            return true;
+        if(!root1 || !root2)
+            return false;
+        return (root1->val == root2->val && isSymmetric(root1->left, root2->right) && isSymmetric(root2->left, root1->right));
+    }
+    
+    bool isSymmetric(TreeNode* root) {
+        if(!root) return true;
+        return isSymmetric(root->left, root->right);
+    }
+};
+
+//与上面方法相同，但是运行时间更短
+class Solution {
+public:
+    bool isSymmetric(TreeNode* root) 
+    {
+        if(root == NULL) return true;
+        return Help(root->left, root->right);
+    }
+    
+    bool Help(TreeNode* left, TreeNode* right)
+    {
+        if(left==NULL && right==NULL) return true;
+        if(left==NULL || right==NULL) return false;
+        if(left->val != right->val) return false;
+        return Help(left->left, right->right) && Help(left->right, right->left);
+    }
+};
+
+
+//使用队列方法
+class Solution {
+public:
+    bool isSymmetric(TreeNode* root) {
+        queue<TreeNode*> tree_queue;
+        tree_queue.push(root);
+        tree_queue.push(root);
+        while(!tree_queue.empty()){
+            TreeNode* left_node = tree_queue.front();
+            tree_queue.pop();
+            TreeNode* right_node = tree_queue.front();
+            tree_queue.pop();
+            if(left_node == NULL && right_node == NULL){
+                continue;
+            }
+            if(left_node == NULL || right_node == NULL){
+                return false;
+            }
+            if(left_node->val != right_node->val){
+                return false;
+            }
+            tree_queue.push(left_node->left);
+            tree_queue.push(right_node->right);
+            tree_queue.push(left_node->right);
+            tree_queue.push(right_node->left);
+        }
+        return true;
+    }
+};
