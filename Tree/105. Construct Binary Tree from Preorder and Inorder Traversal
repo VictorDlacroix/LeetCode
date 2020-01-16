@@ -1,0 +1,81 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        unordered_map<int, int> m;
+        int size = inorder.size();
+        // Map node value to number of nodes up to (not including) itself in order.
+        for(int i = 0; i < size; ++i) m[inorder[i]] = i;
+        return makeTree(preorder, m, 0, size - 1, 0);
+    }
+    
+    static TreeNode* makeTree(vector<int>& preorder, unordered_map<int, int>& m, const int i1, const int j1, const int i2){
+        if(i1 == j1) return new TreeNode(preorder[i1]);
+        if(i1 > j1) return nullptr;
+        TreeNode* n = new TreeNode(preorder[i1]);
+        int next = i2;
+        if(m.count(preorder[i1])) next = m[preorder[i1]] - i2;
+        n->left = makeTree(preorder, m, i1 + 1, i1 + next, i2);
+        n->right = makeTree(preorder, m, i1 + next + 1, j1, i2 + next + 1);
+        return n;
+    }
+};
+
+
+
+
+The first solution here is the standard O(N^2) time O(N) space solution.
+
+class Solution {
+public:
+    TreeNode* constructFromPrePost(vector<int>& pre, vector<int>& post) {
+        return makeTree(pre, post, 0, pre.size()-1, 0, post.size()-1);
+    }
+    static TreeNode* makeTree(vector<int>& pre, vector<int>& post, const int i1, const int j1, const int i2, const int j2) {
+        if(i1 > j1) return nullptr;
+        if(i1 == j1) return new TreeNode(pre[i1]);
+        TreeNode *n = new TreeNode(pre[i1]);
+        int next = i2; // Relative index of matching head in post[]
+        for(int k = i2; k <= j2; ++k)
+            if(post[k] == pre[i1+1]) {next = k+1-i2; break;}
+        
+        n->left = makeTree(pre, post, i1+1, i1+next, i2, i2+next-1); // Convert relative index of post into that of pre[] and post[]
+        n->right = makeTree(pre, post, i1+next+1, j1, i2+next, j2-1);
+        return n;
+        
+    }
+};
+
+auto gucciGang = []() {std::ios::sync_with_stdio(false);cin.tie(nullptr);cout.tie(nullptr);return 0;}();
+If we hash the look up for next , the run-time becomes O(N). Space complexity is still O(N). The solution below uses this and achieves O(N) time.
+
+class Solution {
+public:
+    TreeNode* constructFromPrePost(vector<int>& pre, vector<int>& post) {
+        unordered_map<int, int> m;
+        int size = post.size();
+        for(int i = 0; i < size; ++i) m[post[i]] = i;
+        return makeTree(pre, m, 0, pre.size()-1, 0);
+    }
+    static TreeNode* makeTree(vector<int>& pre, unordered_map<int, int>& m, const int i1, const int j1, const int i2) {
+        if(i1 > j1) return nullptr;
+        if(i1 == j1) return new TreeNode(pre[i1]);
+        TreeNode *n = new TreeNode(pre[i1]);
+        int next = i2;
+        if(m.count(pre[i1+1])) next = m[pre[i1+1]]+1-i2;
+        n->left = makeTree(pre, m, i1+1, i1+next, i2);
+        n->right = makeTree(pre, m, i1+next+1, j1, i2+next);
+        return n;
+        
+    }
+};
+
+auto gucciGang = []() {std::ios::sync_with_stdio(false);cin.tie(nullptr);cout.tie(nullptr);return 0;}();
