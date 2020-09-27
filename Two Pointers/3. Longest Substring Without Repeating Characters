@@ -1,0 +1,41 @@
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        int count = 1, j_start = 0, max_count = 1;
+        if(!s[0])
+            return 0;
+        else if(!s[1])
+            return max_count;
+        
+        for(int i=1;i<s.size();i++)
+            {
+                for(int j=j_start;j<i;j++)
+                {
+                    if(s[j]!=s[i])
+                        count++;
+                    else
+                        j_start=j+1;
+                }
+                if(count>max_count)
+                    max_count=count;
+                count=1;
+            }
+        return max_count;
+    }
+};
+
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        int ans = 0, start = 0;
+        unordered_map<char, int> M;
+        for(int i = 0; i < s.length(); i++){
+            if(M.find(s[i]) != M.end() && start <= M[s[i]])
+                start = M[s[i]] + 1;
+            else
+                ans = max(ans, i - start + 1);
+            M[s[i]] = i; //将当前字符的索引存进M中，使用的方法依然是滑动窗口
+        }
+        return ans;
+    }
+};
