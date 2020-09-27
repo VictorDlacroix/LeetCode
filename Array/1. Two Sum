@@ -6,7 +6,7 @@ public:
         unordered_map<int, int> prevMap;  //hash_map和unordered_map都是用哈希表实现的
         for(int i = 0; i < nums.size(); i++){
             int diff = target - nums[i];
-            if(prevMap.count(diff)) //序列容器使用的是find，而关联容器有count这个方法
+            if(prevMap.count(diff)) //序列容器使用的是find，而关联容器有count这个方法，关联容器中也有find方法
                 return {prevMap[diff], i};
             prevMap[nums[i]] = i; //这里的意思是将当前的值和索引插入到prevMap中
         }
